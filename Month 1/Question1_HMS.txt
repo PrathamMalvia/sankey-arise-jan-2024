@@ -1,0 +1,285 @@
+----------------------------------------------------------------------------------------------------
+DB for Hospital Management System (using MYSQL)
+----------------------------------------------------------------------------------------------------
+CREATE DATABASE hms;
+USE hms;
+
+CREATE TABLE MedicalInsurance (
+    Medical_Insurance_ID INT PRIMARY KEY,
+    Insurance_Company VARCHAR(100),
+    Policy_Number VARCHAR(50),
+    Expiry_Date DATE
+);
+
+CREATE TABLE Patients (
+    Patient_ID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Date_of_Birth DATE,
+    Gender ENUM('Male', 'Female', 'Other'),
+    Address VARCHAR(255),
+    Phone_Number VARCHAR(15),
+    Medical_Insurance_ID INT,
+    FOREIGN KEY (Medical_Insurance_ID) REFERENCES MedicalInsurance(Medical_Insurance_ID)
+);
+
+CREATE TABLE Doctors (
+    Doctor_ID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Specialization VARCHAR(100)
+);
+
+CREATE TABLE Nurses (
+    Nurse_ID INT PRIMARY KEY,
+    Name VARCHAR(100)
+);
+
+CREATE TABLE Administrators (
+    Admin_ID INT PRIMARY KEY,
+    Name VARCHAR(100)
+);
+
+CREATE TABLE Appointments (
+    Appointment_ID INT PRIMARY KEY,
+    Patient_ID INT,
+    Doctor_ID INT,
+    Appointment_Date DATE,
+    Status ENUM('Scheduled', 'Cancelled', 'Completed'),
+    FOREIGN KEY (Patient_ID) REFERENCES Patients(Patient_ID),
+    FOREIGN KEY (Doctor_ID) REFERENCES Doctors(Doctor_ID)
+);
+
+CREATE TABLE Diagnosis (
+    Diagnosis_ID INT PRIMARY KEY,
+    Patient_ID INT,
+    Date DATE,
+    Description TEXT,
+    FOREIGN KEY (Patient_ID) REFERENCES Patients(Patient_ID)
+);
+
+CREATE TABLE Treatment (
+    Treatment_ID INT PRIMARY KEY,
+    Diagnosis_ID INT,
+    Medication VARCHAR(255),
+    Dosage VARCHAR(50),
+    Start_Date DATE,
+    End_Date DATE,
+    FOREIGN KEY (Diagnosis_ID) REFERENCES Diagnosis(Diagnosis_ID)
+);
+
+CREATE TABLE Bills (
+    Bill_ID INT PRIMARY KEY,
+    Patient_ID INT,
+    Total_Amount DECIMAL(10, 2),
+    Payment_Status ENUM('Paid', 'Unpaid'),
+    FOREIGN KEY (Patient_ID) REFERENCES Patients(Patient_ID)
+);
+
+----------------------------------------------------------------------------------------------------
+Normalization form of the schema
+----------------------------------------------------------------------------------------------------
+
+The schema appears to be at least in the third normal form (3NF), and in some cases, it may reach the Boyce-Codd Normal Form (BCNF). 
+The reasons are: 
+
+Elimination of Repeating Groups:
+Each table represents a single entity, and fields within each table represent attributes of that entity. There are no repeating groups within any field.
+
+Atomic Values:
+The values in each field are atomic, meaning they cannot be divided further. For example, the Patients table has atomic fields such as name, date_of_birth, address, etc.
+
+Primary Keys:
+Each table has a primary key uniquely identifying each record in the table. Primary keys ensure that each row in a table is uniquely identifiable.
+
+Foreign Keys:
+Foreign keys establish relationships between tables. This allows for referential integrity and ensures that data is consistent across related tables.
+
+Normalization to 3NF:
+The schema avoids transitive dependencies. For instance, in the Doctors table, the specialization field depends only on the doctor_id, and not on any other non-key attributes. Similarly, in the Departments table, the description field depends only on the department_id. This indicates that the schema is at least in the 3NF.
+
+Possibly BCNF:
+Depending on the actual functional dependencies within the data, the schema might even be in BCNF. To ascertain this, one would need to analyze all functional dependencies and ensure that every determinant is a candidate key. If any table meets this condition, it is in BCNF.
+
+----------------------------------------------------------------------------------------------------
+Register new user roles and personas
+----------------------------------------------------------------------------------------------------
+
+-- Register new medical insurance 
+INSERT INTO MedicalInsurance (Medical_Insurance_ID, Insurance_Company, Policy_Number, Expiry_Date)
+VALUES
+    (1, 'ABC Insurance', 'POL12345', '2024-12-31'),
+    (2, 'XYZ Insurance', 'POL67890', '2025-06-30'),
+    (3, 'LMN Insurance', 'POL54321', '2024-09-15'),
+    (4, 'PQR Insurance', 'POL98765', '2025-03-20'),
+    (5, 'EFG Insurance', 'POL24680', '2024-11-05');
+
+-- Register new patients
+INSERT INTO Patients (Patient_ID, Name, Date_of_Birth, Gender, Address, Phone_Number, Medical_Insurance_ID)
+VALUES
+    (1, 'Clark Kent', '1990-05-15', 'Male', '123 Main St, Cityville', '555-1234', 1),
+    (2, 'Lois Lane', '1985-08-20', 'Female', '456 Oak St, Townsville', '555-5678', 2),
+    (3, 'Henry Higgins', '1978-12-10', 'Male', '789 Pine St, Villagetown', '555-9101', 3),
+    (4, 'Simon Cyrene', '1995-03-25', 'Female', '101 Elm St, Hamletville', '555-1122', 4),
+    (5, 'Charlie Davis', '1980-09-05', 'Other', '202 Maple St, Countryside', '555-3344', 5);
+
+-- Register new doctor 
+INSERT INTO Doctors (Doctor_ID, Name, Specialization)
+VALUES
+    (1, 'Dr. Smith', 'Cardiology'),
+    (2, 'Dr. Johnson', 'Orthopedics'),
+    (3, 'Dr. Adams', 'Pediatrics'),
+    (4, 'Dr. Williams', 'Dermatology'),
+    (5, 'Dr. Jones', 'Neurology');
+    
+-- Register new nurse
+INSERT INTO Nurses (Nurse_ID, Name)
+VALUES
+    (1, 'Nurse Anderson'),
+    (2, 'Nurse Martinez'),
+    (3, 'Nurse Taylor'),
+    (4, 'Nurse Mitchell'),
+    (5, 'Nurse Cooper');
+    
+-- Register new administrator
+INSERT INTO Administrators (Admin_ID, Name)
+VALUES
+    (1, 'Alex'),
+    (2, 'Bob');
+
+
+INSERT INTO Appointments (Appointment_ID, Patient_ID, Doctor_ID, Appointment_Date, Status)
+VALUES
+    (1, 1, 1, '2024-02-10', 'Scheduled'),
+    (2, 2, 2, '2024-02-15', 'Scheduled'),
+    (3, 3, 3, '2024-02-20', 'Scheduled'),
+    (4, 4, 4, '2024-02-25', 'Scheduled'),
+    (5, 5, 5, '2024-03-01', 'Scheduled');
+
+INSERT INTO Diagnosis (Diagnosis_ID, Patient_ID, Date, Description)
+VALUES
+    (1, 1, '2024-02-12', 'Common cold, prescribed rest and fluids.'),
+    (2, 2, '2024-02-18', 'Sprained ankle, advised pain relievers and ice pack.'),
+    (3, 3, '2024-02-22', 'Ear infection, prescribed antibiotics.'),
+    (4, 4, '2024-02-28', 'Skin rash, recommended topical ointment.'),
+    (5, 5, '2024-03-05', 'Headache and fatigue, advised hydration and rest.');
+
+	INSERT INTO Treatment (Treatment_ID, Diagnosis_ID, Medication, Dosage, Start_Date, End_Date)
+	VALUES
+		(1, 1, 'ColdAway', '2 tablets daily', '2024-02-12', '2024-02-18'),
+		(2, 2, 'PainX', 'As needed', '2024-02-18', '2024-02-25'),
+		(3, 3, 'AntibioticA', '1 capsule twice a day', '2024-02-22', '2024-03-01'),
+		(4, 4, 'RashRelief', 'Apply topically', '2024-02-28', '2024-03-07'),
+		(5, 5, 'RestfulSleep', '1 tablet before bedtime', '2024-03-05', '2024-03-12');
+
+INSERT INTO Bills (Bill_ID, Patient_ID, Total_Amount, Payment_Status)
+VALUES
+    (1, 1, 150.00, 'Paid'),
+    (2, 2, 75.50, 'Unpaid'),
+    (3, 3, 200.25, 'Paid'),
+    (4, 4, 50.00, 'Unpaid'),
+    (5, 5, 120.75, 'Paid');
+
+
+
+----------------------------------------------------------------------------------------------------
+Add to the list of diagnosis of the patient tagged by date
+----------------------------------------------------------------------------------------------------
+INSERT INTO Diagnosis (Diagnosis_ID, Patient_ID, Date, Description) VALUES
+	(6, 1, '2024-04-02', 'Migraine, prescribed pain relievers and rest.');
+
+
+----------------------------------------------------------------------------------------------------
+Fetch required details of a particular patient
+----------------------------------------------------------------------------------------------------
+SELECT * FROM Patients WHERE Name LIKE "Lois%";
+
+
+----------------------------------------------------------------------------------------------------
+Prepare bill for the patient at the end of checkout
+----------------------------------------------------------------------------------------------------
+SELECT Patient_ID, SUM(Total_Amount) AS Total_Bill
+FROM Bills
+WHERE Patient_ID = 1
+GROUP BY Patient_ID;
+
+
+----------------------------------------------------------------------------------------------------
+Fetch and show data from various related tables (Joins)
+----------------------------------------------------------------------------------------------------
+SELECT p.Name AS Patient_Name, d.Name AS Doctor_Name, a.Appointment_Date
+FROM Patients p
+JOIN Appointments a ON p.Patient_ID = a.Patient_ID
+JOIN Doctors d ON a.Doctor_ID = d.Doctor_ID
+WHERE p.Patient_ID = 1;
+
+
+----------------------------------------------------------------------------------------------------
+Optimize repeated read operations using views/materialized views
+----------------------------------------------------------------------------------------------------
+-- Create a view to fetch patient-doctor info
+CREATE VIEW Patient_Doctor_Info AS
+SELECT p.Name AS Patient_Name, d.Name AS Doctor_Name, a.Appointment_Date
+FROM Patients p
+JOIN Appointments a ON p.Patient_ID = a.Patient_ID
+JOIN Doctors d ON a.Doctor_ID = d.Doctor_ID;
+
+-- Use the view to display patient-doctor info
+SELECT * FROM Patient_Doctor_Info 
+WHERE Patient_Name LIKE "Simon%";
+
+----------------------------------------------------------------------------------------------------
+Optimize read operations using indexing
+----------------------------------------------------------------------------------------------------
+CREATE INDEX idx_patient_name ON Patients(Name);
+
+
+----------------------------------------------------------------------------------------------------
+Optimizing bill generation using stored procedures
+----------------------------------------------------------------------------------------------------
+-- Example of a stored procedure to calculate total bill for a patient
+DELIMITER //
+CREATE PROCEDURE CalculateBill(IN patientID INT)
+BEGIN
+    SELECT SUM(Total_Amount) AS Total_Bill
+    FROM Bills
+    WHERE Patient_ID = patientID;
+END //
+DELIMITER ;
+
+-- Call the stored procedure
+CALL CalculateBill(1);
+
+
+----------------------------------------------------------------------------------------------------
+Add necessary triggers to indicate when a patient's medical insurance limit has expired
+----------------------------------------------------------------------------------------------------
+DELIMITER //
+
+CREATE TRIGGER CheckInsuranceExpiry
+BEFORE INSERT ON Diagnosis
+FOR EACH ROW
+BEGIN
+    DECLARE insurance_expiry DATE;
+    DECLARE insurance_id INT;
+    
+    -- Retrieve the Medical_Insurance_ID for the patient
+    SELECT Medical_Insurance_ID INTO insurance_id
+    FROM Patients
+    WHERE Patient_ID = NEW.Patient_ID;
+    
+    -- Retrieve the expiry date of the medical insurance
+    SELECT Expiry_Date INTO insurance_expiry
+    FROM MedicalInsurance
+    WHERE Medical_Insurance_ID = insurance_id;
+    
+    IF insurance_expiry < NEW.Date THEN
+        -- Handle expired insurance
+        -- For example, raise an error or update patient's insurance status
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Medical insurance has expired for this patient';
+    END IF;
+END //
+
+DELIMITER ;
+
+
+
+

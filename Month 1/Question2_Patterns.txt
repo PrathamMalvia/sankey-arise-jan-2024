@@ -1,0 +1,51 @@
+----------------------------------------------------------------------------------------------------
+Design patterns
+----------------------------------------------------------------------------------------------------
+Design patterns are reusable solutions to recurring problems in software design. They provide guidelines for how to structure code to achieve certain goals and avoid pitfalls, rather than being hard-and-fast rules. Learning design patterns gives software engineers a shared understanding and vocabulary to discuss and address design problems.
+
+Design patterns are categorized as:
+1) Creational patterns: These provide different ways to instantiate objects, each with their own benefits and drawbacks. Examples include factory, builder, prototype and singleton patterns. These give flexibility in how and when objects are created, often hiding complexities of creation from the rest of the code.
+
+2) Structural patterns: These define relationships and interactions between entities like objects, interfaces, inheritance hierarchies. Examples include adapter, bridge, decorator and proxy patterns. They help ensure entities work together without tightly coupling them.
+
+3) Behavioral patterns: These patterns define interactions between entities and how they communicate with each other. Examples include visitor, strategy, state and observer patterns. They encapsulate behaviors into reusable and flexible code units instead of hardcoding behaviors throughout the application.
+
+Design Principle Tradeoffs: Patterns provide guidelines to balance principles like flexibility vs simplicity, coupling vs cohesion and composition vs inheritance.
+
+Common Usage of Patterns
+The problem a pattern solves, benefits it provides and costs it incurs depend on how and where it is used. Usage include:
+
+1)Applicable programming languages and environments
+2)The type of application being developed (e.g. microservice vs monolith)
+3)How design principles are prioritized
+4)The complexity of the code and team's familiarity with it
+
+
+----------------------------------------------------------------------------------------------------
+Rendering patterns
+----------------------------------------------------------------------------------------------------
+A rendering pattern refers to the way in which the HTML, CSS, and JavaScript code is all processed and rendered in a web application or website. Different rendering patterns are used to achieve different performance and user experience goals.
+
+Common rendering patterns are:
+1) Server-side rendering (SSR): In SSR, the web server generates the HTML content of a web page on the server-side and sends it to the client's browser. This approach can improve initial loading times and SEO (search engine optimization) but can be slower for dynamic content.
+
+2) Client-side rendering (CSR): In CSR, the client's browser generates the HTML content of a web page on the client-side using JavaScript. This approach can provide a fast and interactive user experience but can be slower for initial loading times and bad for SEO.
+
+3) Static site generation (SSG): In SSG, the HTML content of a web page is generated at build time and served to the client as a static file. This approach can provide excellent performance and security but can be less flexible for dynamic content.
+
+Different rendering pattern options:
+
+1) Static Websites
+A static website is a type of website that consists of a set of HTML, CSS, and JavaScript files that are served to the client's browser without any server-side processing or database integration.
+
+2) Single Page Applications (SPAs) with Client Side Rendering (CSR)
+A Single Page Application (SPA) is a type of web application rendered with Client-side rendering (CSR). This means that all necessary HTML, CSS, and JavaScript files are loaded at once when the user first loads the page. Then Javascript dynamically updates the content as the user interacts with the page, without requiring a full page reload.
+
+3) Server Side Rendering (SSR)
+Server-side rendering (SSR) is a technique for rendering web pages on the server-side before sending them to the client's browser. In SSR, the server generates the HTML content of a web page based on the requested URL and data, and sends it to the client's browser as a complete HTML document.
+
+4) Static Site Generation (SSG)
+Static site generation (SSG) is a technique for building web pages by pre-generating HTML, CSS, and JavaScript files at build time instead of rendering them on the server or client-side.
+
+5)Incremental Static Regeneration (ISR)
+Incremental Static Regeneration (ISR) is a technique for building static sites that combines the benefits of both Server-Side Rendering (SSR) and Static Site Generation (SSG).
